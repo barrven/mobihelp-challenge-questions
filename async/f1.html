@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async Challenge</title>
+</head>
+<body>
+    <h1>Async Practice</h1>
+    
+    <p>
+        Often in Javascript we will make a request for some data to some external URL. We cannot know how long this request will take,
+        but want to render results as quickly as possible and in the correct order. This can help make it appear that the interface is 
+        running smoothly for the user
+    </p>
+
+    <p>
+        Your challenge is to complete the renderResponse() function below in such a way that it will print the responses in order as 
+        soon as it recieves them. In other words, you can't wait for all the responses to be recieved before you output the result. 
+        But if the first response is the second item, you have to wait until you get the first item before you can output it.
+    </p>
+
+    <h2>Result</h2>
+    <div id='output'></div>
+
+<script>
+
+    //this function simluates making some data request that may return asynchronously
+    function simDataRequest(url, callback) {
+        
+        let responses = {
+            "url-1": "First Data result",
+            "url-2": "Second Data result",
+            "url-3": "Third data result"
+        };
+        
+        let randomDelay = (Math.round(Math.random() * 1E4) % 8000) + 1000;
+
+        console.log("Requesting: " + url); //log the request and notice that it appears before the result
+
+        //return requested response after a random delay
+        setTimeout(() =>{
+            callback(responses[url]);
+        }, randomDelay);
+    }
+
+
+    function getResponse(file) {
+
+        simDataRequest(file, text => {
+            renderResponse(file, text);
+        });
+    }
+
+    function renderResponse(file, text) {
+
+        responses[file] = text; // store the response in the responses object
+
+        // loop through the stored responses in order
+        for (var i = 0; i < urls.length; i++) {
+
+            // check if a given file is in the responses (this controls the order that responses will be printer)
+            if (urls[i] in responses) {
+                // check if the response has been already rendered
+                if (responses[urls[i]] !== true) { //hasn't been rendered yet
+                    //document.writeln(`${responses[urls[i]]}<br>`); 
+                    document.getElementById('output').innerHTML += `${responses[urls[i]]}<br>`; //render the response to the document
+                    responses[urls[i]] = true; //change the reponse value to true once it's been rendered
+                }
+            }
+            else {
+                //if the first file is not in responses then we know we don't want to render any responses yet, so just quit the function
+                return;
+            }
+        }
+
+        document.getElementById('output').innerHTML += "Finished rendering";
+    }
+
+    //hold urls to request
+    let urls = ["url-1", "url-2", "url-3"];
+    //object to hold responses
+    let responses = {};
+
+    // request all files at once
+    getResponse(urls[0]);
+    getResponse(urls[1]);
+    getResponse(urls[2]);
+
+</script>
+</body>
+</html>

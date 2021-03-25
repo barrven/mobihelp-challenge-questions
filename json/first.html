@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table From JSON</title>
+    <style>
+        body{font-family: Arial, Helvetica, sans-serif;}
+        .table {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        .cell {
+            border: 1px solid black
+        }
+    </style>
+</head>
+
+<body>
+    
+    <h1>JSON Object Iteration With HTML Table</h1>
+
+    <div id="content"></div>
+   
+    <script>
+        const output = document.getElementById('content')
+
+        fetch('https://jsonplaceholder.typicode.com/todos')
+
+            // Returns the response as json format (an array of JSON objects)
+            .then(response => response.json()) 
+            .then(data => {
+                console.log(data[0]) //Look at the first object in the array
+                populateTable(data) //Draw the table and pass the data
+            })
+            .catch(err => {
+                console.log("There was a problem retrieving the data", err)
+                output.innerHTML = "There was a problem retrieving the data"
+            })
+
+        function populateTable(data) {
+            
+            //Create the elements we need
+            let table = document.createElement("table")
+            let tableBody = document.createElement("tbody")
+            let tableHead = document.createElement("thead")
+
+            //Construct the head of the table with all the data labels
+            let row = document.createElement("tr")
+
+            //Loop through each attribute of the first JSON object in the array
+            for (let item in data[0]) {
+                //create a cell and a text node
+                let cell = document.createElement("th")
+                // add the name of the object's attribute
+                let cellText = document.createTextNode(item) 
+
+                //Attach the cell text to the cell
+                cell.appendChild(cellText)
+                cell.setAttribute("class", "cell") //set cell style
+                row.appendChild(cell) //add the cell to the row
+            }
+            tableHead.appendChild(row) //attach the row to the table head
+            table.appendChild(tableHead) //attach the table head to the table
+
+            //Loop through each object inside the returned array of JSON objects
+            for (let i = 0; i < data.length; i++) {
+
+                let row = document.createElement("tr")
+
+                for (let item in data[i]) {
+                    let cell = document.createElement("td")
+                    let cellText = document.createTextNode(data[i][item])
+                    cell.appendChild(cellText)
+                    cell.setAttribute("class", "cell")
+                    row.appendChild(cell)
+                }
+
+                tableBody.appendChild(row)
+            }
+
+            table.appendChild(tableBody)
+            output.appendChild(table)
+            table.setAttribute("class", "table")
+        }
+
+    </script>
+</body>
+
+</html>

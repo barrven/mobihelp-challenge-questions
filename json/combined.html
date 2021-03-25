@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table From JSON</title>
+    <style>
+        .table{
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        .cell{
+            border: 1px solid black
+        }
+    </style>
+</head>
+<body>
+    <h1>JSON Object iteration</h1>
+    <div>
+        <button id="dataToggle" onclick="toggleData()">Show me the data!</button>
+    </div>
+    <div id="content"></div>
+
+
+    <script>
+        const output = document.getElementById('content')
+        const button = document.getElementById("dataToggle")
+        let data = []
+
+        fetch('https://jsonplaceholder.typicode.com/todos')
+            .then(response => response.json())
+            .then(json => {
+                console.log(json[0])
+                data = json
+            })
+            .catch(err => {
+                console.log("There was a problem retrieving the data", err)
+                output.innerHTML = "There was a problem retrieving the data"
+            })
+        
+        let showData = true //boolean switch to track if show is on or off
+        function toggleData(){
+            if(showData){
+                populateTable(data)
+                document.getElementById("dataToggle").innerText = "Hide the data"
+                showData = false
+            }
+            else{
+                output.innerHTML = ""
+                document.getElementById("dataToggle").innerText = "Show me the data!"
+                showData = true
+            }
+        }       
+
+        function populateTable(data){
+            
+            let table = document.createElement("table")
+            let tableBody = document.createElement("tbody")
+            let tableHead = document.createElement("thead")
+
+            let row = document.createElement("tr")
+            for(let item in data[0]){
+                let cell = document.createElement("th")
+                let cellText = document.createTextNode(item)
+                cell.appendChild(cellText)
+                cell.setAttribute("class", "cell")
+                row.appendChild(cell)
+            }
+            tableBody.appendChild(row)
+            table.appendChild(tableBody)
+
+
+            for (let i = 0; i < data.length; i++){
+                
+                let row = document.createElement("tr")
+
+                for (let item in data[i]){
+                    let cell = document.createElement("td")
+                    let cellText = document.createTextNode(data[i][item])
+                    cell.appendChild(cellText)
+                    cell.setAttribute("class", "cell")
+                    row.appendChild(cell)
+                }
+
+                tableBody.appendChild(row)
+            }
+
+            table.appendChild(tableBody)
+            output.appendChild(table)
+            table.setAttribute("class", "table")
+
+        }
+
+    </script>
+</body>
+</html>

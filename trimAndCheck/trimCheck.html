@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+
+        /*
+            Splits input into a 
+        */
+
+        function splitMonthAndDay(input) {
+            let month = ''
+            let day = ''
+            let charType = ''
+            let firstItem = true
+
+            for (char of input) {
+
+                if (char !== ' ') {
+                    charType = 'c'
+
+                    if (firstItem) {
+                        month += char
+                    }
+                    else {
+                        day += char
+                    }
+                }
+                else {
+                    if (charType === 'c') firstItem = false
+
+                    charType = 'w'
+                }
+            }
+            return { _month: month, _day: day }
+        }
+
+        //TODO: change the above function so that it behaves the same as arr.split(<separator>)
+
+
+        /*
+            valid dates are in the format "<Month> <day number>" where there are an arbitrary number of space characters 
+            before, between, or after the month and day
+        */
+        function checkValidDate(input) {
+            let dateObj = splitMonthAndDay(input)
+
+            //check that the day is a valid number
+            try {
+                dateObj._day = parseInt(dateObj._day)
+            }
+            catch (err) {
+                return false
+            }
+
+            if (dateObj._month === 0) return false //date._day should be between 1 - <length of month>
+
+            console.log(dateObj)
+
+            let calendar = {
+                'January': 31, 'February': [28, 29], 'March': 31, 'April': 30, 'May': 31, 'June': 30,
+                'July': 31, 'August': 31, 'September': 30, 'October': 31, 'November': 30, 'December': 31
+            }
+
+            for (item in calendar) {
+                console.log(calendar[item])
+                if (item === dateObj._month) {
+                    //dateObj month is valid, check the day
+                    if (dateObj._month === 'February') {
+                        return dateObj._day <= calendar[item][0] || dateObj._day <= calendar[item][1]
+                    }
+
+                    return dateObj._day <= calendar[item]
+                }
+            }
+
+            // console.log(validMonth)
+            // console.log(days)
+        }
+
+        console.log(checkValidDate('March    23'))
+
+
+        let a = 'a/b/c'
+        let x = a.split('/')
+
+    </script>
+
+
+</body>
+
+</html>

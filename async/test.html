@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async Challenge</title>
+</head>
+
+<body>
+    <h1>Async Practice</h1>
+
+    <h2>Result</h2>
+    <div id='output'></div>
+
+    <script>
+
+        //this function simluates making some data request that may return asynchronously
+        function simDataRequest(url, callback) {
+
+            let responses = {
+                "url-1": "First Data result",
+                "url-2": "Second Data result",
+                "url-3": "Third data result"
+            };
+
+            let randomDelay = (Math.round(Math.random() * 1E4) % 8000) + 1000;
+
+            console.log("Requesting: " + url); //log the request and notice that it appears before the result
+
+            //return requested response after a random delay
+            setTimeout(() => {
+                callback(responses[url]);
+            }, randomDelay);
+        }
+
+
+        function getResponse(file) {
+
+            simDataRequest(file, text => {
+                renderResponse(file, text);
+            });
+        }
+
+        function renderResponse(file, text) {
+
+
+            //COMPLETE THIS FUNCTION
+
+        }
+
+        //hold urls to request
+        let urls = ["url-1", "url-2", "url-3"];
+        //object to hold responses
+        let responses = {};
+
+        // request all files at once
+        getResponse(urls[0]);
+        getResponse(urls[1]);
+        getResponse(urls[2]);
+
+    </script>
+</body>
+
+</html>
