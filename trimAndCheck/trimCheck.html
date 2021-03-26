@@ -19,13 +19,13 @@
         function splitMonthAndDay(input) {
             let month = ''
             let day = ''
-            let charType = ''
+            let charIsSpace = true
             let firstItem = true
 
             for (char of input) {
 
                 if (char !== ' ') {
-                    charType = 'c'
+                    charIsSpace = false
 
                     if (firstItem) {
                         month += char
@@ -35,16 +35,39 @@
                     }
                 }
                 else {
-                    if (charType === 'c') firstItem = false
+                    if (charIsSpace === false) firstItem = false
 
-                    charType = 'w'
+                    charIsSpace = true
                 }
             }
             return { _month: month, _day: day }
         }
 
-        //TODO: change the above function so that it behaves the same as arr.split(<separator>)
+        //This function behaves similar to String.split()
+        function split(input, separator){
+            let output = []
+            let charIsSeparator = true
+            let buffer = ''
 
+            for (char of input){
+                if(char !== separator){
+                    charIsSeparator = false
+                    buffer += char
+                }
+                else{
+                    if(charIsSeparator === false){
+                        output.push(buffer)
+                        buffer = ''
+                    }
+                    charIsSeparator = true
+                }
+            }
+            if(buffer !== '') output.push(buffer)
+
+            return output
+        }
+
+        console.log(split('     January 28', ' '))
 
         /*
             valid dates are in the format "<Month> <day number>" where there are an arbitrary number of space characters 
@@ -86,11 +109,7 @@
             // console.log(days)
         }
 
-        console.log(checkValidDate('March    23'))
-
-
-        let a = 'a/b/c'
-        let x = a.split('/')
+        //console.log(checkValidDate('     February 29'))
 
     </script>
 
