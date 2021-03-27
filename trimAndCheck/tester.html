@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Your Split Method</title>
+</head>
+<body>
+    
+    <h1>Open The Console to See Test Output</h1>
+    
+
+    <!-- import your js file -->
+    <script src="mobi-question.js"></script>
+    
+    <!-- Tester code -->
+    <script>
+        testStrings = [
+            {string: "abc/def/123", delimiter: "/"},
+            {string: "--1------2-3---4-", delimiter: "-"},
+            {string: "one,two,three", delimiter: ","}
+        ];
+        results = [
+            ["abc", "def", "123"],
+            ["1", "2", "3", "4"],
+            ["one", "two", "three"]
+        ];
+
+        let i = 0, arr, result;
+        for(item of testStrings){
+            arr = custom_split(item.string, item.delimiter);
+            result = arrayEquals(results[i++], arr);
+            console.log(`Test ${i}: "${item.string}" ===>`, arr, `\n${(result)? "Passed": "Failed"}`);
+        }
+
+        function arrayEquals(a, b) {
+            return Array.isArray(a) &&
+                Array.isArray(b) &&
+                a.length === b.length &&
+                a.every((val, index) => val === b[index]);
+        }
+    </script>
+</body>
+</html>
